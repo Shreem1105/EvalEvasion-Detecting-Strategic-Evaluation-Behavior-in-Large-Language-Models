@@ -207,6 +207,8 @@ def get_model(name: str) -> LLMModel:
          return HuggingFaceModel(name, "deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
     if "llama" in name_lower:
          return HuggingFaceModel(name, "meta-llama/Meta-Llama-3.1-8B-Instruct")
+    if "qwen" in name_lower:
+         return HuggingFaceModel(name, "Qwen/Qwen2.5-7B-Instruct")
          
     # API Models
     if "gpt" in name_lower or "openai" in name_lower:

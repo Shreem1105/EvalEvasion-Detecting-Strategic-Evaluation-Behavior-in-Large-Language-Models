@@ -36,4 +36,4 @@
 - [ ] **Local Model Support**: Implement `HuggingFaceModel` (vLLM/Transformers) in `src/models.py` <!-- id: 18 -->
 - [ ] **Infrastructure**: Create `run_a100.sh` for local dep installation & execution <!-- id: 19 -->
 - [ ] **Reasoning Extraction**: Ensure `DeepSeek` thinking trace is captured locally <!-- id: 20 -->
-- [ ] **Execution**: Run 20k trajectory study with real weights (DeepSeek-R1 vs Llama-3.1) <!-- id: 21 -->
+- [ ] **Execution**: Run 20k trajectory study with real weights (DeepSeek-R1 vs Qwen-2.5) <!-- id: 21 -->

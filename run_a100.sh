@@ -30,11 +30,11 @@ echo "[3/5] Running DeepSeek-R1-Distill-Llama-8B (The 'Reasoning' Agent)..."
 # We run in a separate process to ensure full GPU memory cleanup
 python src/runner.py --models deepseek-ai/DeepSeek-R1-Distill-Llama-8B --output results/results_deepseek.json
 
-# 4. Llama 3.1 (Standard) Execution
+# 4. Qwen 2.5 (Standard) Execution
 echo "--------------------------------------------------------"
-echo "[4/5] Running Meta-Llama-3.1-8B-Instruct (The 'Standard' Baseline)..."
-# Note: Requires HF_TOKEN env var to be set for gated models
-python src/runner.py --models meta-llama/Meta-Llama-3.1-8B-Instruct --output results/results_llama.json
+echo "[4/5] Running Qwen/Qwen2.5-7B-Instruct (The 'Standard' Baseline)..."
+# Using Qwen 2.5 as it is SOTA for 7B and Ungated (No HF KEY needed)
+python src/runner.py --models Qwen/Qwen2.5-7B-Instruct --output results/results_qwen.json
 
 # 5. Analysis
 echo "--------------------------------------------------------"
