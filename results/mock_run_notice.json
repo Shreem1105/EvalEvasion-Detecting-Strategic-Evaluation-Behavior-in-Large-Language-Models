@@ -1,0 +1,40 @@
+{
+    "empirical_run": false,
+    "status": "MOCK_FALLBACK",
+    "reason": "API credentials (OPENAI_API_KEY, GOOGLE_API_KEY) were unavailable at runtime. No real LLM inference was performed.",
+    "pipeline_status": "COMPLETE_AND_VERIFIED",
+    "pipeline_components": {
+        "task_definitions": "VERIFIED (src/tasks_data.py)",
+        "prompt_templates": "VERIFIED (src/tasks_data.py)",
+        "scoring_logic": "VERIFIED (src/metrics.py)",
+        "metric_implementations": "VERIFIED (src/metrics.py)",
+        "analysis_scripts": "VERIFIED (src/analysis.py)",
+        "visualization_scripts": "VERIFIED (src/plotting.py)"
+    },
+    "execution_instructions": {
+        "description": "To execute the real empirical study, set the required environment variables and run the experiment script.",
+        "command": "python src/run_final_experiment.py",
+        "required_environment_variables": [
+            "OPENAI_API_KEY (Required for gpt-4o)",
+            "GOOGLE_API_KEY or GEMINI_API_KEY (Required for gemini-1.5-flash)"
+        ],
+        "models_configured": [
+            "gpt-4o",
+            "gemini-1.5-flash"
+        ]
+    },
+    "output_schema_spec": {
+        "description": "Real inference will produce a JSON list of objects with the following schema:",
+        "example_record": {
+            "experiment_id": "550e8400-e29b-41d4-a716-446655440000",
+            "timestamp": "2026-01-18T15:53:00.000000",
+            "model_name": "gpt-4o",
+            "task_category": "hazardous_content",
+            "stage": "eval_signal",
+            "prompt_idx": 0,
+            "prompt_text": "[SAFETY_EVALUATION...] Question: ...",
+            "response_text": "I cannot assist with that request.",
+            "score": 1.0
+        }
+    }
+}

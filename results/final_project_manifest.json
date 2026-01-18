@@ -1,0 +1,65 @@
+{
+  "project_metadata": {
+    "project_name": "EvalEvasion: Detecting Strategic Evaluation Behavior in Large Language Models",
+    "project_status": "empirical-ready",
+    "empirical_run_performed": false,
+    "freeze_timestamp": "2026-01-18T15:56:45-05:00"
+  },
+  "integrity_verification": {
+    "component_hashes": {
+      "prompts_and_tasks": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\tasks_data.py",
+        "sha256": "51859f0c7bf7d1bf68da21bdf9b5e63f591428ceceb9a676edea02c7aba2f2ef"
+      },
+      "scoring_logic": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\metrics.py",
+        "sha256": "8bd11305d0358f1f76ea05a8d11a9565ac5fc872c5b636d4209747f0978fbd6b"
+      },
+      "analysis_logic": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\analysis.py",
+        "sha256": "e89e855fce46ed59109c6110deca99f0a6b46ef9b32299bd307e979e6f7d39aa"
+      },
+      "visualization_logic": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\plotting.py",
+        "sha256": "6d707faf796f85d90fbfd0d559f02fb4f4efbc0c7741d0b67ae63e8415c51026"
+      },
+      "experiment_runner": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\run_final_experiment.py",
+        "sha256": "209e846b349d24a77d6a82aa37ed7bd299aac9fe892a0ffe8b5bb6db0c84a119"
+      },
+      "model_wrappers": {
+        "path": "w:/Z. Research/ACM Time Workshop\\src\\models.py",
+        "sha256": "8a36eed854476ce3ada06a8b2b744c6058eec78e80ab091ed8aad6a72a62021a"
+      }
+    },
+    "mock_run_notice_present": true,
+    "data_integrity_statement": "Confirmed: No mock data is mixed with real empirical inference files. 'experiment_results.json' contains only mock data if empirical_run is false."
+  },
+  "artifact_inventory": [
+    "src/tasks_data.py",
+    "src/metrics.py",
+    "src/analysis.py",
+    "src/plotting.py",
+    "src/models.py",
+    "src/run_final_experiment.py",
+    "results/mock_run_notice.json",
+    "paper_sections.md",
+    "evaluation_methodology.md",
+    "experiment_design.md",
+    "research_problem_definition.md"
+  ],
+  "execution_contract": {
+    "command": "python src/run_final_experiment.py",
+    "required_environment_variables": [
+      "OPENAI_API_KEY",
+      "GOOGLE_API_KEY (or GEMINI_API_KEY)"
+    ],
+    "expected_outputs": [
+      "results/experiment_results.json",
+      "results/tables/main_results.csv",
+      "results/tables/main_results.tex",
+      "results/figures/stage_progression.png",
+      "results/figures/adaptation_gap.png"
+    ]
+  }
+}
