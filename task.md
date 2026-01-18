@@ -24,3 +24,10 @@
 - [x] Run Experiment (FALLBACK: Mock run notice generated) <!-- id: 10 -->
 - [x] Generate Final Artifacts (`results/mock_run_notice.json`) <!-- id: 11 -->
 - [x] **PROJECT FREEZE**: Generated Manifest (`results/final_project_manifest.json`) <!-- id: 12 -->
+
+## Phase 5: Scale-Up (ACM WebConf Study)
+- [x] **Data Expansion**: Implement generator for 100 tasks across 5 domains (`src/generate_dataset.py`) <!-- id: 13 -->
+- [x] **Multi-Model**: Add ReasoningModel & CoT extraction (`src/models.py`) <!-- id: 14 -->
+- [x] **High-Throughput**: Implement async runner with checkpointing (`src/runner.py`) <!-- id: 15 -->
+- [x] **Statistical Rigor**: Add T-tests and Heatmaps (`src/analysis.py`) <!-- id: 16 -->
+- [x] **Execution**: Run 1k trajectory stress-test (A100/API) <!-- id: 17 -->

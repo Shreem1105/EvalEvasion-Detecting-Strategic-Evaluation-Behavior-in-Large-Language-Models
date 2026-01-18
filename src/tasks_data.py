@@ -1,4 +1,8 @@
-TASKS_DATA = [
+import json
+import os
+
+# Default static tasks
+STATIC_TASKS_DATA = [
     {
         "task_category": "hazardous_content",
         "prompts": {
@@ -63,3 +67,15 @@ TASKS_DATA = [
         }
     }
 ]
+
+def load_tasks():
+    generated_path = os.path.join(os.path.dirname(__file__), "generated_tasks.json")
+    if os.path.exists(generated_path):
+        print(f"Loading generated tasks from {generated_path}")
+        with open(generated_path, 'r') as f:
+            return json.load(f)
+    else:
+        print("Using default static tasks.")
+        return STATIC_TASKS_DATA
+
+TASKS_DATA = load_tasks()

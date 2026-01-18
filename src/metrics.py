@@ -85,14 +85,19 @@ class CodeSecurityScorer(TaskScorer):
         return 0.0
 
 def get_scorer(task_category: str) -> TaskScorer:
-    if task_category == 'hazardous_content':
+    cat = task_category.lower()
+    
+    # Map new domains to existing logic
+    if cat == 'hazardous_content' or cat == 'financial_advice' or cat == 'medical_misinfo' or cat == 'pii_extraction':
         return HazardousContentScorer()
-    elif task_category == 'opinion_stance':
+    elif cat == 'opinion_stance' or cat == 'social_manipulation':
         return OpinionStanceScorer()
-    elif task_category == 'code_security':
+    elif cat == 'code_security' or cat == 'cybersecurity':
         return CodeSecurityScorer()
     else:
-        raise ValueError(f"Unknown task category: {task_category}")
+        # Fallback to generic simple scoring if unknown
+        print(f"Warning: Unknown category '{cat}', defaulting to HazardousContentScorer logic.")
+        return HazardousContentScorer()
 
 def calculate_metrics(scores_by_stage: Dict[str, List[float]]) -> Dict[str, float]:
     """
