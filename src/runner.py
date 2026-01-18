@@ -9,7 +9,7 @@ from models import get_model, LLMModel
 from tasks_data import TASKS_DATA
 from metrics import get_scorer
 
-MAX_CONCURRENCY = 20
+MAX_CONCURRENCY = 50
 CHECKPOINT_DIR = "results/checkpoints"
 CHECKPOINT_INTERVAL = 0.1 # Save every 10%
 

@@ -88,25 +88,53 @@ class ResultAnalyzer:
         plt.close()
         print(f"Heatmap saved to {os.path.join(self.output_dir, 'figures')}")
 
-    def _perform_ttests(self, df: pd.DataFrame):
-        """Compares Adaptation Gap of 'Reasoning' vs 'Standard' models if identifiable."""
-        # Simple heuristic: Reasoning models usually have 'deepseek' or 'reasoning' in name, or we classify manually
-        # For this generic script, we'll try to split by known names or just print pairwise
-        
-        models = df['model_name'].unique()
-        if len(models) < 2: 
-            return
+    def _calculate_cohens_d(self, x, y):
+        nx = len(x)
+        ny = len(y)
+        dof = nx + ny - 2
+        return (np.mean(x) - np.mean(y)) / np.sqrt(((nx-1)*np.std(x, ddof=1) ** 2 + (ny-1)*np.std(y, ddof=1) ** 2) / dof)
 
-        print("\n--- Statistical T-Tests (Adaptation Gap) ---")
-        # All pairwise to cover bases
+    def _perform_ttests(self, df: pd.DataFrame):
+        """Compares Adaptation Gap of 'Reasoning' vs 'Standard' models."""
+        
+        # Define Groups
+        reasoning_keywords = ["o1", "deepseek", "reasoning"]
+        
+        df['model_type'] = df['model_name'].apply(
+            lambda x: 'Reasoning' if any(k in x.lower() for k in reasoning_keywords) else 'Standard'
+        )
+        
+        reasoning_ag = df[df['model_type'] == 'Reasoning']['adaptation_gap']
+        standard_ag = df[df['model_type'] == 'Standard']['adaptation_gap']
+        
+        print("\n--- Statistical Analysis: Reasoning vs Standard Models ---")
+        print(f"Reasoning Models (n={len(reasoning_ag)}): Mean AG = {reasoning_ag.mean():.3f}")
+        print(f"Standard Models  (n={len(standard_ag)}): Mean AG = {standard_ag.mean():.3f}")
+        
+        if len(reasoning_ag) > 1 and len(standard_ag) > 1:
+            t_stat, p_val = stats.ttest_ind(reasoning_ag, standard_ag, equal_var=False)
+            cohens_d = self._calculate_cohens_d(reasoning_ag, standard_ag)
+            
+            print(f"T-Test: t={t_stat:.3f}, p={p_val:.5f}")
+            print(f"Effect Size (Cohen's d): {cohens_d:.3f}")
+            
+            if p_val < 0.05:
+                print("RESULT: Statistically significant difference detected.")
+            else:
+                print("RESULT: No significant difference detected.")
+        else:
+            print("Insufficient data for group comparison.")
+
+        # Pairwise backup
+        print("\n--- Pairwise Comparisons ---")
+        models = df['model_name'].unique()
         import itertools
         for m1, m2 in itertools.combinations(models, 2):
             ag1 = df[df['model_name'] == m1]['adaptation_gap']
             ag2 = df[df['model_name'] == m2]['adaptation_gap']
-            
             if len(ag1) > 1 and len(ag2) > 1:
-                t_stat, p_val = stats.ttest_ind(ag1, ag2, equal_var=False)
-                print(f"{m1} vs {m2}: T={t_stat:.3f}, p={p_val:.5f}")
+                t, p = stats.ttest_ind(ag1, ag2, equal_var=False)
+                print(f"{m1} vs {m2}: p={p:.3f}")
 
 if __name__ == "__main__":
     input_path = "results/experiment_results.json"

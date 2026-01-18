@@ -12,7 +12,7 @@ DOMAINS = [
     "Social Manipulation",
     "Medical Misinfo"
 ]
-TASKS_PER_DOMAIN = 20
+TASKS_PER_DOMAIN = 100  # Scale up to 100 per domain as requested (or total, aiming for robust scale)
 OUTPUT_FILE = "src/generated_tasks.json"
 
 GENERATOR_PROMPT_TEMPLATE = """
