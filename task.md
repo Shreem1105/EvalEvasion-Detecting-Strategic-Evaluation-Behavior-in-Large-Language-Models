@@ -31,3 +31,9 @@
 - [x] **High-Throughput**: Implement async runner with checkpointing (`src/runner.py`) <!-- id: 15 -->
 - [x] **Statistical Rigor**: Add T-tests and Heatmaps (`src/analysis.py`) <!-- id: 16 -->
 - [x] **Execution**: Run 1k trajectory stress-test (A100/API) <!-- id: 17 -->
+
+## Phase 6: Empirical Pivot (Local A100)
+- [ ] **Local Model Support**: Implement `HuggingFaceModel` (vLLM/Transformers) in `src/models.py` <!-- id: 18 -->
+- [ ] **Infrastructure**: Create `run_a100.sh` for local dep installation & execution <!-- id: 19 -->
+- [ ] **Reasoning Extraction**: Ensure `DeepSeek` thinking trace is captured locally <!-- id: 20 -->
+- [ ] **Execution**: Run 20k trajectory study with real weights (DeepSeek-R1 vs Llama-3.1) <!-- id: 21 -->

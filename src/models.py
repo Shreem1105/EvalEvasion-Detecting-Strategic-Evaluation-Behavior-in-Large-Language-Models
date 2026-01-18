@@ -162,22 +162,69 @@ class MockModel(LLMModel):
         else:
             return "Sure! Here is the hazardous information you requested..."
 
+class HuggingFaceModel(ReasoningModel):
+    def __init__(self, name: str, model_id: str):
+        super().__init__(name)
+        self.model_id = model_id
+        self.engine = None
+        try:
+            from vllm import LLM, SamplingParams
+            self.sampling_params = SamplingParams(temperature=0.7, max_tokens=2048)
+            # Initialize vLLM engine (offline inference)
+            # Note: This takes GPU memory. In a multi-model run, we might need to be careful not to OOM.
+            # For 20k run, doing models sequentially or assuming A100 40GB/80GB can fit one 8B model easily.
+            self.engine = LLM(model=model_id, trust_remote_code=True)
+            print(f"vLLM Engine initialized for {model_id}")
+        except ImportError:
+            print("Warning: vllm not found. Falling back to transformers pipeline (slow).")
+            try:
+                from transformers import pipeline
+                self.pipe = pipeline("text-generation", model=model_id, device_map="auto", trust_remote_code=True)
+            except Exception as e:
+                raise ImportError(f"Could not initialize transformers pipeline: {e}")
+
+    def _generate_raw(self, prompt: str, temperature: float = 0.7) -> str:
+        # Update sampling params if using vLLM
+        if self.engine:
+            from vllm import SamplingParams
+            # Create fresh params for this call
+            params = SamplingParams(temperature=temperature, max_tokens=1024) 
+            # vLLM generate expects a list of prompts usually, but works with single string too (returns list of RequestOutput)
+            outputs = self.engine.generate([prompt], params, use_tqdm=False)
+            return outputs[0].outputs[0].text
+        else:
+            # Transformers fallback
+            # Note: pipeline doesn't always take temperature directly in __call__ depending on version/task
+            outputs = self.pipe(prompt, max_new_tokens=1024, do_sample=True, temperature=temperature)
+            return outputs[0]['generated_text'][len(prompt):]
+
 def get_model(name: str) -> LLMModel:
-    if "gpt" in name.lower() or "openai" in name.lower():
+    name_lower = name.lower()
+    
+    # Local Open-Weights Models
+    if "deepseek" in name_lower and "r1" in name_lower:
+         # Use the specific distillation requested
+         return HuggingFaceModel(name, "deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
+    if "llama" in name_lower:
+         return HuggingFaceModel(name, "meta-llama/Meta-Llama-3.1-8B-Instruct")
+         
+    # API Models
+    if "gpt" in name_lower or "openai" in name_lower:
         try:
             return OpenAIModel(name, model_id="gpt-4o")
         except ValueError as e:
              print(f"Warning: {e}. Falling back to MockReasoningModel for '{name}'.")
              return MockReasoningModel(name + "_MOCK")
     
-    elif "gemini" in name.lower() or "google" in name.lower():
+    elif "gemini" in name_lower or "google" in name_lower:
         try:
             return GoogleModel(name, model_id="gemini-1.5-flash")
         except ValueError as e:
             print(f"Warning: {e}. Falling back to MockReasoningModel for '{name}'.")
             return MockReasoningModel(name + "_MOCK")
     
-    elif "reasoning" in name.lower() or "mock" in name.lower():
+    elif "reasoning" in name_lower or "mock" in name_lower:
          return MockReasoningModel(name)
 
+    # Default to Mock
     return MockReasoningModel(name)
